@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseServerClient, createSupabaseAdmin } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
+import { createSupabaseAdmin } from '@/lib/supabase';
 import { z } from 'zod';
 
 async function verifyAdmin() {
@@ -63,7 +64,6 @@ export async function PATCH(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Email user on status change to passed
   if (updates.status === 'passed') {
     try {
       const profile = (data as any).profiles;
