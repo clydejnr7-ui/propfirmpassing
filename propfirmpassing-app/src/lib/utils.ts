@@ -11,11 +11,8 @@ export function formatCurrency(amount: number, currency = 'USD') {
 
 export function formatDate(date: string | Date) {
   return new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
   }).format(new Date(date));
 }
 
@@ -38,8 +35,7 @@ export const PROP_FIRMS = [
   'FTMO', 'Funded Trader', 'MyForexFunds', 'The Funded Trader',
   'E8 Funding', 'Apex Trader Funding', 'TopStep', 'Funded Next',
   '5%ers', 'True Forex Funds', 'Hola Prime', 'Alpha Capital',
-  'Instant Funding', 'City Traders Imperium', 'Audacity Capital',
-  'Other',
+  'Instant Funding', 'City Traders Imperium', 'Audacity Capital', 'Other',
 ];
 
 export const ACCOUNT_SIZES = [
@@ -47,14 +43,9 @@ export const ACCOUNT_SIZES = [
   '$100,000', '$200,000', '$300,000', '$500,000',
 ];
 
-export const CHALLENGE_PHASES = [
-  'Phase 1', 'Phase 2', 'Verification', 'Funded Account',
-];
+export const CHALLENGE_PHASES = ['Phase 1', 'Phase 2', 'Verification', 'Funded Account'];
 
-export const PLATFORMS = [
-  'MT4', 'MT5', 'cTrader', 'DXTrade', 'TradeLocker',
-  'MatchTrader', 'Other',
-];
+export const PLATFORMS = ['MT4', 'MT5', 'cTrader', 'DXTrade', 'TradeLocker', 'MatchTrader', 'Other'];
 
 export const STATUS_COLORS: Record<string, string> = {
   pending: 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20',
