@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseServerClient } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 import { createSupabaseAdmin } from '@/lib/supabase';
 
 export async function POST(req: NextRequest) {
@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'submission_id required' }, { status: 400 });
   }
 
-  // Fetch the submission
   const { data: submission, error: fetchError } = await supabase
     .from('account_submissions')
     .select('*')
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Create NowPayments invoice
     const npRes = await fetch('https://api.nowpayments.io/v1/invoice', {
       method: 'POST',
       headers: {
@@ -61,7 +59,6 @@ export async function POST(req: NextRequest) {
 
     const npData = await npRes.json();
 
-    // Update submission with payment ID
     const admin = createSupabaseAdmin();
     await admin
       .from('account_submissions')
