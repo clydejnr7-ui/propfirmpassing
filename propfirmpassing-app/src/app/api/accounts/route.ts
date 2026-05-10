@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseServerClient } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase-server';
 import { z } from 'zod';
 
 const submitSchema = z.object({
@@ -52,7 +52,6 @@ export async function POST(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-  // Notify admin via email (optional — uses Resend)
   try {
     if (process.env.RESEND_API_KEY && process.env.ADMIN_EMAIL) {
       const { Resend } = await import('resend');
@@ -76,7 +75,7 @@ export async function POST(req: NextRequest) {
       });
     }
   } catch {
-    // Non-fatal — don't fail the request if email fails
+    // Non-fatal
   }
 
   return NextResponse.json({ account: data }, { status: 201 });
