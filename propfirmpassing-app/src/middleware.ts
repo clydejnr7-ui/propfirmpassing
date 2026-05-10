@@ -6,22 +6,35 @@ const PROTECTED_PATHS = ['/dashboard', '/admin'];
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  const supabase = createMiddlewareClient({ req, res });
 
-  const { data: { session } } = await supabase.auth.getSession();
-
-  const path = req.nextUrl.pathname;
-  const isProtected = PROTECTED_PATHS.some((p) => path.startsWith(p));
-
-  if (isProtected && !session) {
-    const loginUrl = new URL('/login', req.url);
-    loginUrl.searchParams.set('next', path);
-    return NextResponse.redirect(loginUrl);
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL === 'https://placeholder.supabase.co'
+  ) {
+    return res;
   }
 
-  // Redirect logged-in users away from auth pages
-  if (session && (path === '/login' || path === '/signup')) {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
+  try {
+    const supabase = createMiddlewareClient({ req, res });
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const path = req.nextUrl.pathname;
+    const isProtected = PROTECTED_PATHS.some((p) => path.startsWith(p));
+
+    if (isProtected && !session) {
+      const loginUrl = new URL('/login', req.url);
+      loginUrl.searchParams.set('next', path);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    if (session && (path === '/login' || path === '/signup')) {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+  } catch {
+    // If Supabase fails, allow request through rather than returning 404
   }
 
   return res;
